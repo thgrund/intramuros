@@ -1,0 +1,106 @@
+body {
+  background: #3c3f41;
+  color: white;
+  font-family: monospace;
+  overflow-x: hidden;
+}
+
+/*  Editor  */
+div.editor, pre, code {
+  min-height: 120px;
+}
+
+div.editor, textarea, pre {
+  background: #2b2b2b;
+  color: #A9B7C6;
+}
+
+pre {
+  min-height: 100%;
+  min-width: 200px;
+  background: #2B2B2B;
+  transition: background-color 0.5s ease;
+}
+
+code {
+  min-width: 200px;
+}
+
+@-o-keyframes fadeIt {
+  0%   { background-color: #2b2b2b; }
+  50%  { background-color: #515151; }
+  100% { background-color: #2b2b2b; }
+}
+@keyframes fadeIt {
+  0%   { background-color: #2b2b2b; }
+  50%  { background-color: #515151; }
+  100% { background-color: #2b2b2b; }
+}
+
+@-moz-keyframes fadeIt {
+  0%   { background-color: #2b2b2b; }
+  50%  { background-color: #515151; }
+  100% { background-color: #2b2b2b; }
+}
+
+.backgroundAnimated{
+
+  background-image:none !important;
+  -o-animation: fadeIt 0.5s ease-in-out;
+  -moz-animation: fadeIt 0.5s ease-in-out;
+  animation: fadeIt 0.5s ease-in-out;
+  transition: background-color 0.5s ease-in-out;
+}
+
+div.editor,
+textarea,
+code,
+pre {
+  -moz-tab-size : 4;
+  -o-tab-size : 4;
+  tab-size : 4;
+  float: left;
+}
+
+code, pre {
+  display: inline-block;
+}
+
+
+
+div.label {
+  float: left;
+  position:relative;
+  top:70px;
+}
+
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
+
+.text {
+  background: black;
+  color: white;
+}
+
+.evalButton {
+  background: darkGrey;
+  color: white;
+}
+
+#global {
+position: absolute;
+  padding-top: 20px;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: no-display;
+}
+
+canvas {
+background: transparent;
+position: absolute; 
+left: 0;
+top: 0;
+}

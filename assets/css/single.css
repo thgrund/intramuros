@@ -1,0 +1,36 @@
+div.row {
+    float: left;
+    width: 100%;
+    height: 90%;
+}
+
+.proxy-column {
+    float: left;
+}
+
+.proxy.active {
+    border: 1px solid #ffc800;
+    -webkit-appearance: none;
+}
+
+code[class*="language-"], pre[class*="language-"] {
+    height: 100%;
+}
+
+.proxy > code {
+    font-size: 9px;
+}
+
+pre.proxy {
+    height: 76px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.hidden {
+    display: none;
+}
