@@ -1,0 +1,19 @@
+{
+				"name": "intramuros",
+				"version": "0.0.1",
+				"scripts": {
+								"start": "concurrently --default-input-target 1 -i --kill-others -n \"server,client\" \"npm run start:server\" \"npm run start:client\"",
+								"start:server": "node server.js --password p -o 57121 -s 57120",
+								"start:client": "node client.js --server 127.0.0.1 --tidalCabal"
+				},
+				"dependencies": {
+								"coffee-script": "*",
+								"concurrently": "^5.1.0",
+								"express": "*",
+								"highlight-within-textarea": "^2.0.5",
+								"nopt": "*",
+								"osc": "*",
+								"share": "0.6.3",
+								"ws": "*"
+				}
+}
