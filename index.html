@@ -7,11 +7,28 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/editor.css">
   <link rel="stylesheet" href="assets/css/single.css">
+  <script src="assets/js/prism.js" type="text/javascript"></script>
   <script src="main.js"></script>
 </head>
 <body>
-<div id="elm"></div>
+<div id="global">
 
+  <div class="header">
+    <div class="float-left">
+      <a tabindex="1" href="single.html"><img class="icon-btns" src="assets/img/gsingle.png" /></a>
+      <a tabindex="2" href="hlayout.html"><img class="icon-btns" src="assets/img/ghlayout.png" /></a>
+      <a tabindex="4" href="./index.html"><img class="icon-btns" src="assets/img/gmlayout.png" /></a>
+    </div>
+    <div class="float-right">
+      <input type="file" name="ins" id="files" class="text" value="Upload"/>
+      <input type="text" name="filename" length="32" id="filename" class="text" value="tidal"/>
+      <input type="button" name="ins" id="ins" class="text" onclick="save()" value="Save"/>
+    </div>
+  </div>
+  <hr/>
+
+  <div id="elm"></div>
+</div>
 <script>
   var app = Elm.Main.init({
     node: document.getElementById('elm')
