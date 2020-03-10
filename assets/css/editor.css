@@ -104,3 +104,19 @@ position: absolute;
 left: 0;
 top: 0;
 }
+
+
+img.icon-btns {
+  width: 24px;
+  height: 24px;
+  background-color: #2B2B2B;
+}
+
+div.float-left {
+  float: left;
+}
+
+div.float-right {
+  float: right;
+}
+

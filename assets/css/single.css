@@ -4,6 +4,11 @@ div.row {
     height: 90%;
 }
 
+div.header {
+    padding-top: 15px;
+    height: 35px;
+}
+
 .proxy-column {
     float: left;
 }
@@ -34,3 +39,25 @@ pre.proxy {
 .hidden {
     display: none;
 }
+
+body {
+    background: #3c3f41;
+    color: white;
+    font-family: monospace;
+    overflow-x: hidden;
+}
+
+img.icon-btns {
+    width: 24px;
+    height: 24px;
+    background-color: #2B2B2B;
+}
+
+div.float-left {
+    float: left;
+}
+
+div.float-right {
+    float: right;
+}
+

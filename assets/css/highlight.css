@@ -1,0 +1,16 @@
+.elmsh {color: #f8f8f2;background: #2b2b2b;}
+.elmsh-hl {background: #343434;}
+.elmsh-add {background: #003800;}
+.elmsh-del {background: #380000;}
+.elmsh-comm {color: #808080;}
+.elmsh1 {color: #6897BB;}
+.elmsh2 {color: #A5C261;}
+.elmsh3 {color:  #fd971f; font-weight: bold}
+.elmsh4 {color: #66d9ef;}
+.elmsh5 {color: #e6db74;}
+.elmsh6 {color: #ae81ff;}
+.elmsh7 {color: #fd971f;}
+.elmsh-elm-ts, .elmsh-js-dk, .elmsh-css-p
+{font-weight: bold;color: #66d9ef;}
+.elmsh-js-ce {font-style: italic;color: #a6e22e;}
+.elmsh-css-ar-i {font-weight: bold;color: #CC7832;}

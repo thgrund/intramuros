@@ -1,112 +1,127 @@
-module Main exposing (main)
+module Main exposing (Model, Msg(..), getCode, init, main, subscriptions, update, view, viewEditor)
 
-import Basics as List
 import Browser
-import Dict exposing (..)
-import Html exposing (Attribute, Html, code, div, p, pre, text)
-import Html.Attributes exposing (class, spellcheck, tabindex, id, contenteditable)
-import Html.Events exposing (on)
-import Json.Decode as Json
+import Dict exposing (Dict)
+import Element exposing (..)
+import Element.Events exposing (..)
+import Html exposing (Html)
+import Html.Attributes as A
+import Html.Events as E
+import Http
+import SyntaxHighlight exposing (elm, toBlockHtml)
 
-numberOfEditors = 3
-
-targetInnerText : Json.Decoder String
-targetInnerText =
-  Json.at ["target", "innerText"] Json.string
-
-onInputInnerText : (String -> msg) -> Attribute msg
-onInputInnerText tagger =
-  on "input" (Json.map tagger targetInnerText)
-
--- UPDATE
-type Msg
- = ChangeContent Int String
-
--- updatetUsers = Dict.update 1 (Maybe.map (\name -> "wow...")) editors2
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
-  case msg of
-    ChangeContent key newContent ->
-        ( Dict.update key (\_ -> Just newContent) model, Cmd.none)
-
-
--- MODEL
-
-type alias Model = Dict Int String
-
-type alias Editor =
-    { content : String }
-
--- SUBSCRIPTIONS
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-  Sub.none
-
-
--- MAIN
+numberOfEditors = 9
 
 main =
-    Browser.element    {
-        init = init
+    Browser.element
+        { init = init
         , update = update
         , subscriptions = subscriptions
         , view = view
-    }
+        }
+
+
+type alias Model =
+    Dict Int String
 
 zip : List a -> List b -> List (a, b)
 zip xs ys =
   List.map2 Tuple.pair xs ys
 
-init : () -> (Model, Cmd Msg)
+init : () -> ( Model, Cmd Msg )
 init _ =
-  (
-     Dict.fromList (zip (List.range 1 numberOfEditors) (List.repeat numberOfEditors ""))
-
-     , Cmd.none
-  )
-
-createEditorElement : Int  -> String -> Model -> Html Msg
-createEditorElement i cl model =
-    code [
-        id (String.append "editor" (String.fromInt i))
-        , tabindex 5
-        , spellcheck False
-        , contenteditable True
-        , class (String.append "language-tidal" cl)
-        , onInputInnerText (ChangeContent i)
-        ]
-        [text (Maybe.withDefault "" (Dict.get i model))]
-
-createEditorElements : List Int -> Model -> List (Html Msg)
-createEditorElements lst model =
-       (List.map (\i -> (createEditorElement i " hidden" model)) lst)
+    (
+    Dict.fromList (zip (List.range 1 numberOfEditors) (List.repeat numberOfEditors ""))
+    , getCode )
 
 
-createProxyElement : Int -> String -> Model -> Html Msg
-createProxyElement i cl model =
-      pre [class (String.append "proxy " cl)][
-        code
-           [id (String.append "proxy" (String.fromInt i))
-           , spellcheck False
-           , class "language-tidal"]
-        [text (Maybe.withDefault "" (Dict.get i model))]
-      ]
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        UpdateContent key newContent ->
+            ( Dict.update key (\_ -> Just newContent) model, Cmd.none)
 
-createProxyElements : List Int -> String -> Model -> List (Html Msg)
-createProxyElements lst cl model =
-        List.map(\i -> (createProxyElement i cl model)) lst
+        CodeResponse result ->
+            ( Dict.update 1 (\_ -> Just (Result.withDefault "" result)) model, Cmd.none)
+
+
+
+type Msg
+    = UpdateContent Int String
+    | CodeResponse (Result Http.Error String)
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
+
+
+getCode =
+    Http.get
+        { url = "https://gist.githubusercontent.com/virtuaCode/709989669f002a4755758b76588625b3/raw/cc6ee7967a7bc28f487958c88ecb84b501a78a7a/tidal-01.hs"
+        , expect = Http.expectString CodeResponse
+        }
+
 
 view : Model -> Html Msg
 view model =
- div []
-     [ div [class "row1"] [
-          div [class "column cw-80"] [
-             pre [class "editor"]
-             (createEditorElement 1 "" model :: (createEditorElements (List.range 2 numberOfEditors) model))
-          ]
-          , div [class "column cw-20"]
-              (createProxyElement 1 "active" model ::
-              (createProxyElements (List.range 2 numberOfEditors) "" model))
+    layout [ height fill, width fill ] <|
+        column [ height fill, width fill ]
+            [el []
+                (html <| Html.node "style" [] [ Html.text "pre {margin: 0px; word-break: break-all; white-space: pre-wrap;} .s {} " ])
+            , el
+                [ height fill, width fill ]
+                (html <| viewEditor model 1)
+            ]
+
+
+viewEditor : Model -> Int -> Html Msg
+viewEditor model key =
+    let
+        elements =
+            case Dict.get key model of
+                 Nothing ->
+                   []
+                 Just c ->
+                    [ elm c
+                        |> Result.map (toBlockHtml (Just 1))
+                        |> Result.withDefault
+                            (Html.code
+                                []
+                                [ Html.text "isEmpty : String -> Bool" ]
+                            )
+                    , Html.textarea
+                        [ A.style "position" "absolute"
+                        , A.style "top" "0px"
+                        , A.style "left" "0px"
+                        , A.style "border-size" "0px"
+                        , A.style "background-color" "transparent"
+                        , A.style "resize" "none"
+                        , A.style "overflow" "hidden"
+                        , A.style "width" "80%"
+                        , A.style "height" "100%"
+                        , A.style "margin" "0"
+                        , A.style "padding" "1rem"
+                        , A.style "box-sizing" "border-box"
+                        , A.style "opacity" "1"
+                        , A.style "color" "transparent"
+                        , A.style "white-space" "pre-wrap"
+                        , A.style "font-family" "monospace"
+                        , A.style "caret-color" "white"
+                        , A.style "word-break" "break-all"
+                        , A.class "elmsh"
+                        , A.class "s"
+                        , E.onInput (UpdateContent key)
+                        ]
+                        [ Html.text c
+                        ]
+                    ]
+    in
+    Html.div
+        [ A.attribute "spellcheck" "false"
+        , A.style "background-color" "#2b2b2b"
+        , A.style "padding" "1rem"
+        , A.style "flex-grow" "100000"
+        , A.style "width" "80%"
         ]
-     ]
+        elements

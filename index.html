@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Intramuros</title>
-  <link rel="stylesheet" href="assets/css/prism.css">
-  <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/editor.css">
   <link rel="stylesheet" href="assets/css/single.css">
-  <script src="assets/js/prism.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="assets/css/highlight.css">
   <script src="main.js"></script>
 </head>
 <body>
-<div id="global">
 
   <div class="header">
     <div class="float-left">
@@ -25,14 +22,10 @@
       <input type="button" name="ins" id="ins" class="text" onclick="save()" value="Save"/>
     </div>
   </div>
-  <hr/>
 
-  <div id="elm"></div>
-</div>
-<script>
-  var app = Elm.Main.init({
-    node: document.getElementById('elm')
-  });
-</script>
+  <main></main>
+  <script>
+    var app = Elm.Main.init({ node: document.querySelector('main') })
+  </script>
 </body>
 </html>
